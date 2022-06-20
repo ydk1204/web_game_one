@@ -1,0 +1,7 @@
+.ball {
+  width: 10px;
+  height: 10px;
+  position: absolute;
+  background-color: green;
+  transform: translate(-50%, -50%);
+}

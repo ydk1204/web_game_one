@@ -7,4 +7,15 @@
   background-color: black;
   transform: translate(-50%, -50%);
   z-index: 100;
+  animation: box-ani 1s linear;
+}
+
+@keyframes box-ani {
+  from {
+    transform: translate(0, 0);
+  }
+
+  to {
+    transform: translate(0, -1000%);
+  }
 }

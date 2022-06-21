@@ -11,6 +11,8 @@ const Ball = ({ pos }) => {
     setTimeout(() => {
       ball.style.display = "none";
     }, 1000);
+
+    return;
   }, []);
 
   return (

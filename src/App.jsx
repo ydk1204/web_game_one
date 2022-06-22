@@ -43,8 +43,8 @@ function App() {
 
   const createEnemy = () => {
     if (enemyCount > 0) {
-      const x = Math.floor(Math.random() * 300) + 100;
-      const y = Math.floor(Math.random() * 300) + 100;
+      const x = Math.floor(Math.random() * 50) + -50;
+      const y = Math.floor(Math.random() * 600) + 100;
       const newEnemy = [...enemyArr, { x, y }];
       setEnemyArr(newEnemy);
       setEnemyCount((count) => count - 1);

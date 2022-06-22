@@ -2,15 +2,13 @@
   width: 110px;
   height: 110px;
   position: absolute;
-  top: 0;
-  left: 0;
   background-color: black;
   transform: translate(-50%, -50%);
   z-index: 100;
-  animation: box-ani 1s linear;
+  /* animation: box-ani 1s linear; */
 }
 
-@keyframes box-ani {
+/* @keyframes box-ani {
   from {
     transform: translate(0, 0);
   }
@@ -18,4 +16,4 @@
   to {
     transform: translate(0, -1000%);
   }
-}
+} */

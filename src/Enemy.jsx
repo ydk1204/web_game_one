@@ -1,10 +1,12 @@
 import React, { useRef, useEffect, useState } from "react";
 import styles from "./Enemy.module.css";
 
-const Enemy = ({ pos }) => {
+const Enemy = ({ pos, ballInfo }) => {
   // 적이 위에서 부터 아래로 내려오기
   const Enemy = useRef();
   const [EnemyLocation, setEnemyLocation] = useState(pos);
+
+  console.log(ballInfo);
 
   const changeEnemyPos = () => {
     const enemy = Enemy && Enemy.current;

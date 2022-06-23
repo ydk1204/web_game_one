@@ -73,7 +73,9 @@ function App() {
       ></div>
       {ballArr && ballArr.map((ball, index) => <Ball key={index} pos={ball} />)}
       {enemyArr &&
-        enemyArr.map((enemy, index) => <Enemy key={index} pos={enemy} />)}
+        enemyArr.map((enemy, index) => (
+          <Enemy key={index} pos={enemy} ballInfo={ballArr} />
+        ))}
     </div>
   );
 }

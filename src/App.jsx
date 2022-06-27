@@ -1,4 +1,5 @@
 import { useRef, useState, useEffect } from "react";
+import { useSelector, shallowEqual } from "react-redux";
 import styles from "./App.module.css";
 import Ball from "./Ball";
 import Enemy from "./Enemy";
@@ -8,7 +9,7 @@ function App() {
   const [ballPos, setBallPos] = useState({});
   const [enemyPos, setEnemyPos] = useState({});
   const [ballCount, setBallCount] = useState(5);
-  const [enemyCount, setEnemyCount] = useState(2);
+  const [enemyCount, setEnemyCount] = useState(5);
   const [ballArr, setBallArr] = useState([]);
   const [enemyArr, setEnemyArr] = useState([]);
 
@@ -51,6 +52,12 @@ function App() {
     }
   };
 
+  const updateBallInfo = (index, pos) => {
+    const newArr = ballArr;
+    newArr[index] = pos;
+    setBallArr((arr) => newArr);
+  };
+
   // 탄약 베열, 다 쓰면 초기화
   useEffect(() => {
     if (ballCount === 0) {
@@ -71,7 +78,10 @@ function App() {
         ref={PLAYER}
         onClick={(e) => mouseClick(e)}
       ></div>
-      {ballArr && ballArr.map((ball, index) => <Ball key={index} pos={ball} />)}
+      {ballArr &&
+        ballArr.map((ball, index) => (
+          <Ball key={index} index={index} arr={ballArr} pos={ball} />
+        ))}
       {enemyArr &&
         enemyArr.map((enemy, index) => (
           <Enemy key={index} pos={enemy} ballInfo={ballArr} />

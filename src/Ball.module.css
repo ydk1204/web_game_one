@@ -1,6 +1,6 @@
 .ball {
-  width: 110px;
-  height: 110px;
+  width: 100px;
+  height: 100px;
   position: absolute;
   background-color: black;
   transform: translate(-50%, -50%);

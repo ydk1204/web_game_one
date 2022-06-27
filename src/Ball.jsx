@@ -1,13 +1,19 @@
 import React, { useEffect, useRef, useState } from "react";
-import styles from "./Ball.module.css";
+import { useDispatch, useSelector, shallowEqual } from "react-redux";
 
-const Ball = ({ pos }) => {
+import styles from "./Ball.module.css";
+import { ballmove1 } from "./module/store";
+
+const Ball = ({ index, arr, pos }) => {
   const Ball = useRef();
   const [ballLocation, setBallLocation] = useState(pos);
+
+  const dispatch = useDispatch();
 
   const changeBallPos = () => {
     const ball = Ball && Ball.current;
     moveBall();
+    dispatch(ballmove1(index, arr, ballLocation));
     ball.style.top = ballLocation.x + "px";
     ball.style.left = ballLocation.y + "px";
   };

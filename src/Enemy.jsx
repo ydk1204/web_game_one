@@ -8,29 +8,22 @@ const Enemy = ({ pos, ballInfo }) => {
   const [EnemyLocation, setEnemyLocation] = useState(pos);
   const [visible, setVisible] = useState(true);
 
-  // console.log(ballInfo);
+  const onVisible = () => {
+    const enemy = Enemy && Enemy.current;
+    if (enemy !== null) {
+      enemy.style.display = "none";
+      setVisible(false);
+      return;
+    }
+    return;
+  };
 
   const value = useSelector((state) => state);
 
-  for (let ball of value) {
-    let distancX = Math.pow(EnemyLocation.x - ball.x, 2);
-    let distancY = Math.pow(EnemyLocation.y - ball.y, 2);
-    // 공 사이의 간격
-    let After = {
-      MoveBetween: Math.sqrt(distancX + distancY),
-      Between: 50 + 75,
-    };
-    // 공이 맞닿는 경우 반대로
-    if (After.MoveBetween < After.Between) {
-      console.log("충돌");
-      onVisible();
-    }
-  }
-
   const changeEnemyPos = () => {
     const enemy = Enemy && Enemy.current;
-    moveEnemy();
-    if (enemy !== undefined) {
+    if (enemy !== null) {
+      moveEnemy();
       enemy.style.top = EnemyLocation.x + "px";
       enemy.style.left = EnemyLocation.y + "px";
     }
@@ -43,11 +36,24 @@ const Enemy = ({ pos, ballInfo }) => {
     setEnemyLocation(newEnemy);
   };
 
-  const onVisible = () => {
-    const enemy = Enemy && Enemy.current;
-    setVisible(!visible);
-    enemy.style.display = "none";
-  };
+  useEffect(() => {
+    if (value !== undefined) {
+      for (let ball of value) {
+        let distancX = Math.pow(EnemyLocation.x - ball.x, 2);
+        let distancY = Math.pow(EnemyLocation.y - ball.y, 2);
+        // 공 사이의 간격
+        let After = {
+          MoveBetween: Math.sqrt(distancX + distancY),
+          Between: 50 + 75,
+        };
+        // 공이 맞닿는 경우 사라짐
+        if (After.MoveBetween < After.Between && visible) {
+          console.log("충돌");
+          onVisible();
+        }
+      }
+    }
+  }, [value]);
 
   useEffect(() => {
     const enemy = Enemy.current;
@@ -58,8 +64,8 @@ const Enemy = ({ pos, ballInfo }) => {
     enemy.style.left = pos.y + "px";
 
     setTimeout(() => {
-      onVisible();
       clearInterval(interval);
+      onVisible();
     }, 3000);
 
     return;

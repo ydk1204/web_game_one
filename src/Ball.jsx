@@ -12,10 +12,12 @@ const Ball = ({ index, arr, pos }) => {
 
   const changeBallPos = () => {
     const ball = Ball && Ball.current;
-    moveBall();
-    dispatch(ballmove1(index, arr, ballLocation));
-    ball.style.top = ballLocation.x + "px";
-    ball.style.left = ballLocation.y + "px";
+    if (ball !== null) {
+      moveBall();
+      dispatch(ballmove1(index, arr, ballLocation));
+      ball.style.top = ballLocation.x + "px";
+      ball.style.left = ballLocation.y + "px";
+    }
   };
 
   const moveBall = () => {

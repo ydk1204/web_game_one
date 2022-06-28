@@ -13,6 +13,10 @@ function App() {
   const [ballArr, setBallArr] = useState([]);
   const [enemyArr, setEnemyArr] = useState([]);
 
+  const value = useSelector((state) => state);
+
+  console.log(value);
+
   // 마우스 움직일 때마다 플레이어 표시
   const mouseMoving = (e) => {
     const player = PLAYER.current;

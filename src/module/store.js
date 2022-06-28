@@ -1,58 +1,10 @@
-// import { combineReducers } from 'redux';
-// import ballLocation from "./ballLocation";
+import { combineReducers } from 'redux';
+import ballLocation from "./ballLocations";
+import enemyLocation from './enemyLocations';
 
-// const rootReducer = combineReducers({ ballLocation });
-
-const BALLMOVE1 = "BALLMOVE";
-
-export const ballmove1 = (num, arr, pos) => ({
-  type: BALLMOVE1,
-  num,
-  arr,
-  pos
+const rootReducer = combineReducers({
+  ballLocation : ballLocation,
+  enemyLocation : enemyLocation
 });
-
-function rootReducer(currentState, action) {
-  if (action.arr === undefined) {
-    currentState = [];
-  }
-  else if (action.arr !== undefined) {
-    currentState = action.arr;
-  }
-  let newArr = [...currentState];
-  // switch (parseInt(action.num)) {
-  //   case 0:
-  //     newArr[0] = action.pos;
-  //     currentState = newArr;
-  //     return currentState;
-  //   case 1:
-  //     newArr[1] = action.pos;
-  //     currentState = newArr;
-  //     return newArr;
-  //   case 2:
-  //     newArr[2] = action.pos;
-  //     currentState = newArr;
-  //     return newArr;
-  //   case 3:
-  //     newArr[3] = action.pos;
-  //     currentState = newArr;
-  //     return newArr;
-  //   case 4:
-  //     newArr[4] = action.pos;
-  //     currentState = newArr;
-  //     return newArr;
-  //   default:
-  //     const notValue = "값 없음";
-  //     return notValue;
-  // }
-  switch (action.type) {
-    case BALLMOVE1:
-      newArr[parseInt(action.num)] = action.pos;
-      currentState = newArr;
-      return newArr;
-  }
-}
-
-// newArr[1] = action.pos;
 
 export default rootReducer;

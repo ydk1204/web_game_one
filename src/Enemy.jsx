@@ -1,29 +1,36 @@
 import React, { useRef, useEffect, useState } from "react";
-import { useSelector, shallowEqual } from "react-redux";
+import { useDispatch, useSelector, shallowEqual } from "react-redux";
 import styles from "./Enemy.module.css";
+import { enemyMove } from "./module/enemyLocations";
 
-const Enemy = ({ pos, ballInfo }) => {
+const Enemy = ({ index, arr, pos, delfn, stateArr }) => {
   // 적이 위에서 부터 아래로 내려오기
   const Enemy = useRef();
   const [EnemyLocation, setEnemyLocation] = useState(pos);
   const [visible, setVisible] = useState(true);
+
+  const dispatch = useDispatch();
+
+  const DELETEOBJECT = "enemys";
 
   const onVisible = () => {
     const enemy = Enemy && Enemy.current;
     if (enemy !== null) {
       enemy.style.display = "none";
       setVisible(false);
+      // delfn(DELETEOBJECT, index);
       return;
     }
     return;
   };
 
-  const value = useSelector((state) => state);
+  const value = useSelector((state) => state.ballLocation);
 
   const changeEnemyPos = () => {
     const enemy = Enemy && Enemy.current;
     if (enemy !== null) {
       moveEnemy();
+      dispatch(enemyMove(index, arr, EnemyLocation));
       enemy.style.top = EnemyLocation.x + "px";
       enemy.style.left = EnemyLocation.y + "px";
     }
@@ -37,6 +44,7 @@ const Enemy = ({ pos, ballInfo }) => {
   };
 
   useEffect(() => {
+    let i = 0;
     if (value !== undefined) {
       for (let ball of value) {
         let distancX = Math.pow(EnemyLocation.x - ball.x, 2);
@@ -48,9 +56,13 @@ const Enemy = ({ pos, ballInfo }) => {
         };
         // 공이 맞닿는 경우 사라짐
         if (After.MoveBetween < After.Between && visible) {
-          console.log("충돌");
-          onVisible();
+          delfn(DELETEOBJECT, index);
+          if (stateArr[i] === 1) {
+            console.log("적 비활성화");
+            onVisible();
+          }
         }
+        i++;
       }
     }
   }, [value]);

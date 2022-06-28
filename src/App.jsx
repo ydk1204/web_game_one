@@ -9,13 +9,14 @@ function App() {
   const [ballPos, setBallPos] = useState({});
   const [enemyPos, setEnemyPos] = useState({});
   const [ballCount, setBallCount] = useState(5);
-  const [enemyCount, setEnemyCount] = useState(5);
+  const [enemyCount, setEnemyCount] = useState(0);
   const [ballArr, setBallArr] = useState([]);
   const [enemyArr, setEnemyArr] = useState([]);
 
-  const value = useSelector((state) => state);
+  const [ballStateArr, setBallStateArr] = useState([0, 0, 0, 0, 0]);
+  const [enemyStateArr, setEnemyStateArr] = useState([0, 0, 0, 0, 0]);
 
-  console.log(value);
+  const value = useSelector((state) => state.ballLocation);
 
   // 마우스 움직일 때마다 플레이어 표시
   const mouseMoving = (e) => {
@@ -35,24 +36,44 @@ function App() {
     setBallCount((count) => count - 1);
   };
 
+  // 삭제 함수
+  const onDeleteObject = (objName, index) => {
+    switch (objName) {
+      case "balls":
+        const newArrBall = ballStateArr;
+        newArrBall[index] = 1;
+        setBallStateArr(newArrBall);
+        break;
+      case "enemys":
+        const newArrEnemy = enemyStateArr;
+        newArrEnemy[index] = 1;
+        setEnemyStateArr(newArrEnemy);
+        break;
+      default:
+        console.log("값이 없어요");
+        break;
+    }
+  };
+
   // 해당 useEffect 부터 createEnemy까지 적 만드는 함수
 
   useEffect(() => {
-    if (enemyCount === 0) {
-      return;
-    }
+    // if (enemyCount === 5) {
+    //   return;
+    // }
     setTimeout(() => {
       createEnemy();
     }, Math.floor(Math.random() * 3000) + 1500);
-  }, [enemyCount]);
+  }, [enemyArr.length]);
 
   const createEnemy = () => {
-    if (enemyCount > 0) {
+    if (enemyCount < 5) {
       const x = Math.floor(Math.random() * 50) + -50;
       const y = Math.floor(Math.random() * 600) + 100;
       const newEnemy = [...enemyArr, { x, y }];
       setEnemyArr(newEnemy);
-      setEnemyCount((count) => count - 1);
+      const count = enemyArr.length === 0 ? 0 : enemyArr.length;
+      setEnemyCount(count);
     }
   };
 
@@ -84,11 +105,25 @@ function App() {
       ></div>
       {ballArr &&
         ballArr.map((ball, index) => (
-          <Ball key={index} index={index} arr={ballArr} pos={ball} />
+          <Ball
+            key={index}
+            index={index}
+            arr={ballArr}
+            pos={ball}
+            stateArr={enemyStateArr}
+            delfn={onDeleteObject}
+          />
         ))}
       {enemyArr &&
         enemyArr.map((enemy, index) => (
-          <Enemy key={index} pos={enemy} ballInfo={ballArr} />
+          <Enemy
+            key={index}
+            index={index}
+            arr={enemyArr}
+            pos={enemy}
+            stateArr={ballStateArr}
+            delfn={onDeleteObject}
+          />
         ))}
     </div>
   );

@@ -1,28 +1,26 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect, useState, useCallback } from "react";
 import { useDispatch, useSelector, shallowEqual } from "react-redux";
 import styles from "./Enemy.module.css";
-import { enemyMove } from "./module/enemyLocations";
+import { enemyMove, enemyDie } from "./module/enemyLocations";
+
+const DELETEOBJECT = "enemys";
 
 const Enemy = ({ index, arr, pos, delfn, stateArr }) => {
   // 적이 위에서 부터 아래로 내려오기
   const Enemy = useRef();
   const [EnemyLocation, setEnemyLocation] = useState(pos);
-  const [visible, setVisible] = useState(true);
+  const [visible, setVisible] = useState(false);
 
+  let interval;
   const dispatch = useDispatch();
 
-  const DELETEOBJECT = "enemys";
-
-  const onVisible = () => {
-    const enemy = Enemy && Enemy.current;
-    if (enemy !== null) {
-      enemy.style.display = "none";
-      setVisible(false);
-      // delfn(DELETEOBJECT, index);
-      return;
-    }
-    return;
-  };
+  // const onVisible = () => {
+  //   const enemy = Enemy && Enemy.current;
+  //   if (enemy !== null) {
+  //     return;
+  //   }
+  //   return;
+  // };
 
   const value = useSelector((state) => state.ballLocation);
 
@@ -44,7 +42,6 @@ const Enemy = ({ index, arr, pos, delfn, stateArr }) => {
   };
 
   useEffect(() => {
-    let i = 0;
     if (value !== undefined) {
       for (let ball of value) {
         let distancX = Math.pow(EnemyLocation.x - ball.x, 2);
@@ -55,21 +52,35 @@ const Enemy = ({ index, arr, pos, delfn, stateArr }) => {
           Between: 50 + 75,
         };
         // 공이 맞닿는 경우 사라짐
-        if (After.MoveBetween < After.Between && visible) {
+        if (After.MoveBetween < After.Between && !visible) {
           delfn(DELETEOBJECT, index);
-          if (stateArr[i] === 1) {
-            console.log("적 비활성화");
-            onVisible();
-          }
+          setVisible(true);
+          // onVisible();
+          console.log("네~ 충돌했습니다.");
         }
-        i++;
       }
     }
   }, [value]);
 
   useEffect(() => {
     const enemy = Enemy.current;
-    const interval = setInterval(changeEnemyPos, 50);
+    if (!visible) {
+      interval = setInterval(changeEnemyPos, 50);
+      console.log("인터벌 실행");
+    } else {
+      clearInterval(interval);
+      dispatch(enemyDie(index, arr));
+      console.log("인터벌 중지");
+    }
+    // const interval = setInterval(() => {
+    //   if (!visible) {
+    //     changeEnemyPos();
+    //     console.log("인터벌 실행");
+    //   } else {
+    //     console.log("인터벌 중지");
+    //     clearInterval(interval);
+    //   }
+    // }, 50);
     setEnemyLocation(pos);
 
     enemy.style.top = pos.x + "px";
@@ -77,11 +88,11 @@ const Enemy = ({ index, arr, pos, delfn, stateArr }) => {
 
     setTimeout(() => {
       clearInterval(interval);
-      onVisible();
+      // onVisible();
     }, 3000);
 
     return;
-  }, []);
+  }, [visible]);
 
   // 적이 아래로 내려왔을 때 지금은 일정 시간 뒤에 사라지게 만들었지만
   // intersectionObserver 이용해서 화면 영역을 벗어났을 때 사라지도록 만들기

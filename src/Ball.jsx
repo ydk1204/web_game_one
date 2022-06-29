@@ -4,25 +4,23 @@ import { useDispatch, useSelector, shallowEqual } from "react-redux";
 import styles from "./Ball.module.css";
 import { ballmove } from "./module/ballLocations";
 
+const DELETEOBJECT = "balls";
+
 const Ball = ({ index, arr, pos, delfn, stateArr }) => {
   const Ball = useRef();
   const [ballLocation, setBallLocation] = useState(pos);
-  const [visible, setVisible] = useState(true);
+  const [visible, setVisible] = useState(false);
 
   const dispatch = useDispatch();
 
-  const DELETEOBJECT = "balls";
-
-  const onVisible = () => {
-    const ball = Ball && Ball.current;
-    if (ball !== null) {
-      ball.style.display = "none";
-      setVisible(false);
-
-      return;
-    }
-    return;
-  };
+  // const onVisible = () => {
+  //   const ball = Ball && Ball.current;
+  //   if (ball !== null) {
+  //     console.log("공 충돌");
+  //     return;
+  //   }
+  //   return;
+  // };
 
   const value = useSelector((state) => state.enemyLocation);
 
@@ -44,7 +42,6 @@ const Ball = ({ index, arr, pos, delfn, stateArr }) => {
   };
 
   useEffect(() => {
-    let i = 0;
     if (value !== undefined) {
       for (let enemy of value) {
         let distancX = Math.pow(ballLocation.x - enemy.x, 2);
@@ -55,24 +52,27 @@ const Ball = ({ index, arr, pos, delfn, stateArr }) => {
           Between: 50 + 75,
         };
         // 공이 맞닿는 경우 사라짐
-        if (After.MoveBetween < After.Between && visible) {
-          // onVisible();
+        if (After.MoveBetween < After.Between && !visible) {
+          console.log("충돌");
           delfn(DELETEOBJECT, index);
-          if (stateArr[i] === 1) {
-            onVisible();
-            console.log("공 비활성화");
-          }
+          setVisible(true);
+          // onVisible();
         }
-        i++;
       }
     }
   }, [value]);
 
   useEffect(() => {
     const ball = Ball.current;
-    setVisible(true);
-    ball.style.display = "block";
-    const interval = setInterval(changeBallPos, 10);
+    // setVisible(true);
+    // ball.style.display = "block";
+    const interval = setInterval(() => {
+      if (!visible) {
+        changeBallPos();
+      } else {
+        clearInterval(interval);
+      }
+    }, 10);
     setBallLocation(pos);
 
     ball.style.top = pos.x + "px";
@@ -80,11 +80,11 @@ const Ball = ({ index, arr, pos, delfn, stateArr }) => {
 
     setTimeout(() => {
       clearInterval(interval);
-      onVisible();
+      // onVisible();
     }, 1000);
 
     return;
-  }, []);
+  }, [visible]);
 
   return <div ref={Ball} className={styles.ball} />;
 };

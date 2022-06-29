@@ -1,4 +1,5 @@
 const ENEMYLOCATION = "ENEMYLOCATION";
+const ENEMYDIE = "ENEMYDIE";
 
 const initialArray = [];
 
@@ -8,6 +9,12 @@ export const enemyMove = (num, arr, pos) => ({
   arr,
   pos
 });
+
+export const enemyDie = (index, arr) => ({
+  type: ENEMYDIE,
+  index,
+  arr,
+})
 
 export default function enemyLocation(currentEnemy = initialArray, action) {
   
@@ -24,6 +31,14 @@ export default function enemyLocation(currentEnemy = initialArray, action) {
       newArr[parseInt(action.num)] = action.pos;
       currentEnemy = newArr;
       return newArr;
+    case ENEMYDIE:
+      if (action.arr !== undefined) {
+        currentEnemy = action.arr;
+      }
+      let newEnemyArr = [...currentEnemy];
+      newEnemyArr.splice(action.index, 1);
+      currentEnemy = newEnemyArr;
+      return currentEnemy;
     default:
       return currentEnemy;
   }

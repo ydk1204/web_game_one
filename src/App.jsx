@@ -16,7 +16,8 @@ function App() {
   const [ballStateArr, setBallStateArr] = useState([0, 0, 0, 0, 0]);
   const [enemyStateArr, setEnemyStateArr] = useState([0, 0, 0, 0, 0]);
 
-  const value = useSelector((state) => state.ballLocation);
+  const value = useSelector((state) => state.enemyLocation);
+  console.log(value);
 
   // 마우스 움직일 때마다 플레이어 표시
   const mouseMoving = (e) => {
@@ -37,17 +38,26 @@ function App() {
   };
 
   // 삭제 함수
-  const onDeleteObject = (objName, index) => {
+  const onDeleteBall = (objName, index) => {
     switch (objName) {
       case "balls":
-        const newArrBall = ballStateArr;
-        newArrBall[index] = 1;
-        setBallStateArr(newArrBall);
+        console.log("삭제 함수 실행");
+        const newArrBall = ballArr;
+        newArrBall.splice(index, 1);
+        setBallArr(newArrBall);
         break;
+      default:
+        console.log("값이 없어요");
+        break;
+    }
+  };
+
+  const onDeleteEnemy = (objName, index) => {
+    switch (objName) {
       case "enemys":
-        const newArrEnemy = enemyStateArr;
-        newArrEnemy[index] = 1;
-        setEnemyStateArr(newArrEnemy);
+        const newArrEnemy = enemyArr;
+        newArrEnemy.splice(index, 1);
+        setEnemyArr(newArrEnemy);
         break;
       default:
         console.log("값이 없어요");
@@ -63,16 +73,18 @@ function App() {
     // }
     setTimeout(() => {
       createEnemy();
-    }, Math.floor(Math.random() * 3000) + 1500);
-  }, [enemyArr.length]);
+    }, Math.floor(Math.random() * 1000) + 500);
+  }, [value]);
 
+  // 적 생성 함수
   const createEnemy = () => {
-    if (enemyCount < 5) {
+    const count = value.length;
+    if (count < 1) {
       const x = Math.floor(Math.random() * 50) + -50;
       const y = Math.floor(Math.random() * 600) + 100;
       const newEnemy = [...enemyArr, { x, y }];
       setEnemyArr(newEnemy);
-      const count = enemyArr.length === 0 ? 0 : enemyArr.length;
+      const count = value.length;
       setEnemyCount(count);
     }
   };
@@ -111,7 +123,7 @@ function App() {
             arr={ballArr}
             pos={ball}
             stateArr={enemyStateArr}
-            delfn={onDeleteObject}
+            delfn={onDeleteBall}
           />
         ))}
       {enemyArr &&
@@ -122,7 +134,7 @@ function App() {
             arr={enemyArr}
             pos={enemy}
             stateArr={ballStateArr}
-            delfn={onDeleteObject}
+            delfn={onDeleteEnemy}
           />
         ))}
     </div>

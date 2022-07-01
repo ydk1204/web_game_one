@@ -10,10 +10,11 @@ export const enemyMove = (num, arr, pos) => ({
   pos
 });
 
-export const enemyDie = (index, arr) => ({
+export const enemyDie = (index, arr, pos) => ({
   type: ENEMYDIE,
   index,
   arr,
+  pos
 })
 
 export default function enemyLocation(currentEnemy = initialArray, action) {
@@ -36,7 +37,7 @@ export default function enemyLocation(currentEnemy = initialArray, action) {
         currentEnemy = action.arr;
       }
       let newEnemyArr = [...currentEnemy];
-      newEnemyArr.splice(action.index, 1);
+      newEnemyArr[parseInt(action.num)] = action.pos;
       currentEnemy = newEnemyArr;
       return currentEnemy;
     default:

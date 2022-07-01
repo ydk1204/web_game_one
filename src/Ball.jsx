@@ -13,15 +13,6 @@ const Ball = ({ index, arr, pos, delfn, stateArr }) => {
 
   const dispatch = useDispatch();
 
-  // const onVisible = () => {
-  //   const ball = Ball && Ball.current;
-  //   if (ball !== null) {
-  //     console.log("공 충돌");
-  //     return;
-  //   }
-  //   return;
-  // };
-
   const value = useSelector((state) => state.enemyLocation);
 
   const changeBallPos = () => {
@@ -44,6 +35,7 @@ const Ball = ({ index, arr, pos, delfn, stateArr }) => {
   useEffect(() => {
     if (value !== undefined) {
       for (let enemy of value) {
+        if (enemy === null) return;
         let distancX = Math.pow(ballLocation.x - enemy.x, 2);
         let distancY = Math.pow(ballLocation.y - enemy.y, 2);
         // 공 사이의 간격
@@ -64,8 +56,6 @@ const Ball = ({ index, arr, pos, delfn, stateArr }) => {
 
   useEffect(() => {
     const ball = Ball.current;
-    // setVisible(true);
-    // ball.style.display = "block";
     const interval = setInterval(() => {
       if (!visible) {
         changeBallPos();

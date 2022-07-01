@@ -9,7 +9,7 @@ function App() {
   const [ballPos, setBallPos] = useState({});
   const [enemyPos, setEnemyPos] = useState({});
   const [ballCount, setBallCount] = useState(5);
-  const [enemyCount, setEnemyCount] = useState(0);
+  const [enemyCount, setEnemyCount] = useState(5);
   const [ballArr, setBallArr] = useState([]);
   const [enemyArr, setEnemyArr] = useState([]);
 
@@ -17,7 +17,7 @@ function App() {
   const [enemyStateArr, setEnemyStateArr] = useState([0, 0, 0, 0, 0]);
 
   const value = useSelector((state) => state.enemyLocation);
-  console.log(value);
+  // console.log(value);
 
   // 마우스 움직일 때마다 플레이어 표시
   const mouseMoving = (e) => {
@@ -56,7 +56,7 @@ function App() {
     switch (objName) {
       case "enemys":
         const newArrEnemy = enemyArr;
-        newArrEnemy.splice(index, 1);
+        newArrEnemy.splice(index, 1, null);
         setEnemyArr(newArrEnemy);
         break;
       default:
@@ -66,34 +66,33 @@ function App() {
   };
 
   // 해당 useEffect 부터 createEnemy까지 적 만드는 함수
-
-  useEffect(() => {
-    // if (enemyCount === 5) {
-    //   return;
-    // }
-    setTimeout(() => {
-      createEnemy();
-    }, Math.floor(Math.random() * 1000) + 500);
-  }, [value]);
-
   // 적 생성 함수
   const createEnemy = () => {
-    const count = value.length;
-    if (count < 1) {
+    const count = enemyArr.length;
+    console.log(enemyCount);
+    // console.log("생성");
+    if (enemyCount >= 0) {
       const x = Math.floor(Math.random() * 50) + -50;
       const y = Math.floor(Math.random() * 600) + 100;
       const newEnemy = [...enemyArr, { x, y }];
       setEnemyArr(newEnemy);
-      const count = value.length;
+      const count = enemyCount - 1;
       setEnemyCount(count);
     }
   };
 
-  const updateBallInfo = (index, pos) => {
-    const newArr = ballArr;
-    newArr[index] = pos;
-    setBallArr((arr) => newArr);
-  };
+  useEffect(() => {
+    // console.log(value);
+    if (enemyCount === 0) {
+      console.log("초기화");
+      setEnemyArr([]);
+      setEnemyCount(5);
+      return;
+    }
+    setTimeout(() => {
+      createEnemy();
+    }, Math.floor(Math.random() * 1000) + 500);
+  }, [enemyCount]);
 
   // 탄약 베열, 다 쓰면 초기화
   useEffect(() => {
@@ -127,16 +126,18 @@ function App() {
           />
         ))}
       {enemyArr &&
-        enemyArr.map((enemy, index) => (
-          <Enemy
-            key={index}
-            index={index}
-            arr={enemyArr}
-            pos={enemy}
-            stateArr={ballStateArr}
-            delfn={onDeleteEnemy}
-          />
-        ))}
+        enemyArr.map((enemy, index) =>
+          enemy !== null ? (
+            <Enemy
+              key={index}
+              index={index}
+              arr={enemyArr}
+              pos={enemy}
+              stateArr={ballStateArr}
+              delfn={onDeleteEnemy}
+            />
+          ) : null
+        )}
     </div>
   );
 }

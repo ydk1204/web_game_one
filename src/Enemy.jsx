@@ -14,14 +14,6 @@ const Enemy = ({ index, arr, pos, delfn, stateArr }) => {
   let interval;
   const dispatch = useDispatch();
 
-  // const onVisible = () => {
-  //   const enemy = Enemy && Enemy.current;
-  //   if (enemy !== null) {
-  //     return;
-  //   }
-  //   return;
-  // };
-
   const value = useSelector((state) => state.ballLocation);
 
   const changeEnemyPos = () => {
@@ -56,7 +48,7 @@ const Enemy = ({ index, arr, pos, delfn, stateArr }) => {
           delfn(DELETEOBJECT, index);
           setVisible(true);
           // onVisible();
-          console.log("네~ 충돌했습니다.");
+          // console.log("네~ 충돌했습니다.");
         }
       }
     }
@@ -66,21 +58,12 @@ const Enemy = ({ index, arr, pos, delfn, stateArr }) => {
     const enemy = Enemy.current;
     if (!visible) {
       interval = setInterval(changeEnemyPos, 50);
-      console.log("인터벌 실행");
+      // console.log("인터벌 실행");
     } else {
+      dispatch(enemyDie(index, arr, null));
       clearInterval(interval);
-      dispatch(enemyDie(index, arr));
-      console.log("인터벌 중지");
+      // console.log("인터벌 중지");
     }
-    // const interval = setInterval(() => {
-    //   if (!visible) {
-    //     changeEnemyPos();
-    //     console.log("인터벌 실행");
-    //   } else {
-    //     console.log("인터벌 중지");
-    //     clearInterval(interval);
-    //   }
-    // }, 50);
     setEnemyLocation(pos);
 
     enemy.style.top = pos.x + "px";

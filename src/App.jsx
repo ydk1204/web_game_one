@@ -82,11 +82,13 @@ function App() {
   };
 
   useEffect(() => {
-    // console.log(value);
+    // 적이 5명 이상 소환되어 있다면 2초 뒤 자동 초기화
+    // 나중에 플레이어 점수 감소 혹은 게임 오버 형식으로 바꾸기
     if (enemyCount === 0) {
-      console.log("초기화");
-      setEnemyArr([]);
-      setEnemyCount(5);
+      setTimeout(() => {
+        setEnemyArr([]);
+        setEnemyCount(5);
+      }, 2000);
       return;
     }
     setTimeout(() => {

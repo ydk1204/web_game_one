@@ -13,10 +13,11 @@ function App() {
   const [ballArr, setBallArr] = useState([]);
   const [enemyArr, setEnemyArr] = useState([]);
 
-  const [ballStateArr, setBallStateArr] = useState([0, 0, 0, 0, 0]);
-  const [enemyStateArr, setEnemyStateArr] = useState([0, 0, 0, 0, 0]);
+  // const [score, setScore] = useState(0);
 
   const value = useSelector((state) => state.enemyLocation);
+  // 점수 확인 변수
+  const score = useSelector((state) => state.playerScore);
   // console.log(value);
 
   // 마우스 움직일 때마다 플레이어 표시
@@ -111,6 +112,7 @@ function App() {
   return (
     <div className={styles.canvas} onMouseMove={(e) => mouseMoving(e)}>
       <h1>hello world {ballCount}</h1>
+      <h1>My Score {score}</h1>
       <div
         className={styles.player}
         ref={PLAYER}
@@ -123,7 +125,6 @@ function App() {
             index={index}
             arr={ballArr}
             pos={ball}
-            stateArr={enemyStateArr}
             delfn={onDeleteBall}
           />
         ))}
@@ -135,7 +136,6 @@ function App() {
               index={index}
               arr={enemyArr}
               pos={enemy}
-              stateArr={ballStateArr}
               delfn={onDeleteEnemy}
             />
           ) : null

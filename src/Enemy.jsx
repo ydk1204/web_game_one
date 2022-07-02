@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useState, useCallback } from "react";
 import { useDispatch, useSelector, shallowEqual } from "react-redux";
 import styles from "./Enemy.module.css";
 import { enemyMove, enemyDie } from "./module/enemyLocations";
+import { playerScore } from "./module/playerScore";
 
 const DELETEOBJECT = "enemys";
 
@@ -46,6 +47,8 @@ const Enemy = ({ index, arr, pos, delfn, stateArr }) => {
         // 공이 맞닿는 경우 사라짐
         if (After.MoveBetween < After.Between && !visible) {
           delfn(DELETEOBJECT, index);
+          // 적이 플레이어가 쏜 공과 충돌하여 사라질 때 점수 증가
+          dispatch(playerScore());
           setVisible(true);
           // onVisible();
           // console.log("네~ 충돌했습니다.");
